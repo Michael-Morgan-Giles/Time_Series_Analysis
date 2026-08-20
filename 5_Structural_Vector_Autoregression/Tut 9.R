@@ -13,6 +13,7 @@ library(tidyverse)
 library(haven)
 library(tseries)
 library(ggplot2)
+library(haven)
 library(foreign)
 
 'Q2'
@@ -93,7 +94,7 @@ irf_var2_oil_price <- irf(var2, impulse = "oil", response = "D1_price")
 plot(irf_var2_oil_price)
 
 'Q3'
-data <- read_dta("~/1. University/Subjects/ECMT6003 - Applied Business Forecasting/Tutorials/Tut 9/SWecmt.dta")
+data <- read_dta('https://raw.githubusercontent.com/Michael-Morgan-Giles/Time_Series_Analysis/refs/heads/main/5_Structural_Vector_Autoregression/SWecmt.dta')
 
 head(data)
 
@@ -141,6 +142,21 @@ var2 <- restrict(var1, method = "man", resmat = restrict)
 summary(var2)
 
 coef(var2)
+
+var3 <-  SVAR(var1, 
+              p=1, 
+              type="const",
+              Bmat = matrix(c(NA,  0,  0,
+                              NA, NA,  0,
+                              NA, NA, NA),
+                            nrow = 3,
+                            byrow = TRUE),
+              estmethod = "direct", 
+              method = "BFGS",     
+              start = c(1, 1, 1, 1, 1, 1))
+
+
+summary(var3)
 
 ### Now lets plot the IRF
 
